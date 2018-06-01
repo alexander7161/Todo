@@ -91,6 +91,7 @@ class EditTaskActivity : AppCompatActivity() {
         }
         mViewModel!!.addTask(task)
         Toast.makeText(applicationContext, R.string.editTasKActivityTaskSaved, Toast.LENGTH_LONG).show()
+        finish()
 
     }
 }
