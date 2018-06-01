@@ -25,17 +25,17 @@ class TListAdapter(items : ArrayList<TaskData>, listener: OnItemClickListener) :
     }
 
     // Inflates the item views
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.task_list_item, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.task_list_item, parent, false))
     }
 
     // Binds each task in the ArrayList to a view and listener
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        var currentTask: TaskData = listTasks[position]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val currentTask: TaskData = listTasks[position]
 
-        holder?.title?.text = currentTask.title
-        holder?.dueDate?.text = currentTask.dueDate.toString("d MMM YYYY")
-        holder!!.bind(currentTask, listenerTask)
+        holder.title?.text = currentTask.title
+        holder.dueDate?.text = currentTask.dueDate.toString("d MMM YYYY")
+        holder.bind(currentTask, listenerTask)
     }
 
     interface OnItemClickListener {

@@ -54,7 +54,7 @@ class EditTaskActivity : AppCompatActivity() {
             notesInput.setText(t.notes)
             dateInput.init(
                     t.dueDate.year,
-                    t.dueDate.monthOfYear,
+                    t.dueDate.monthOfYear -1,
                     t.dueDate.dayOfMonth, null
             )
         }
