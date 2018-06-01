@@ -22,7 +22,7 @@ class TaskViewModel(@NotNull application: Application) : AndroidViewModel(applic
     }
 
     fun getTask(taskId: Long) : TaskData {
-        return  appDb.taskDataDao().getTask(taskId)
+        return  getAsynTask(appDb).execute(taskId).get()
     }
 
     fun addTask(task: TaskData) {
@@ -37,6 +37,12 @@ class TaskViewModel(@NotNull application: Application) : AndroidViewModel(applic
             return null
         }
 
+    }
+    class getAsynTask(db: TaskDataBase) : AsyncTask<Long, Void, TaskData>() {
+        private var taskDb = db
+        override fun doInBackground(vararg p0: Long?): TaskData {
+            return taskDb.taskDataDao().getTask(p0[0])
+        }
     }
 
 }
