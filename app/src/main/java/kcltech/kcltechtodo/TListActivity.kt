@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_task_list.*
-import android.widget.AdapterView
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 
@@ -15,7 +14,7 @@ import android.support.v7.app.AlertDialog
 class TListActivity : AppCompatActivity(), TListAdapter.OnItemClickListener {
     private var db: TaskDataBase? = null
     private var mViewModel: TaskViewModel? = null
-    private var listAdapter: TListAdapter? = null
+    private var taskAdapter: TListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,22 +24,21 @@ class TListActivity : AppCompatActivity(), TListAdapter.OnItemClickListener {
 
         db = TaskDataBase.getInstance(this)
 
-        listAdapter = TListAdapter(arrayListOf(), this)
+        taskAdapter = TListAdapter(arrayListOf(), this)
 
         recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.adapter = listAdapter
+        recycler_view.adapter = taskAdapter
 
+        // If liveData changes, update the recyclerView adapter
         mViewModel!!.getCurrentData().observe(this, Observer { tasks ->
-            listAdapter!!.addTasks(tasks!!)
+            taskAdapter!!.addTasks(tasks!!)
         })
 
+        //Floating action button to add new task.
         fab.setOnClickListener {
             val intent = Intent(applicationContext, EditTaskActivity::class.java)
             startActivity(intent)
         }
-
-
-
     }
 
     override fun onItemClick(task: TaskData) {
@@ -81,6 +79,4 @@ class TListActivity : AppCompatActivity(), TListAdapter.OnItemClickListener {
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
     }
-
-
 }

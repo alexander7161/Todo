@@ -7,7 +7,6 @@ import android.arch.lifecycle.LiveData
 import android.os.AsyncTask
 import kotlinx.android.synthetic.main.activity_task_list.view.*
 
-
 class TaskViewModel(@NotNull application: Application) : AndroidViewModel(application) {
     var listTasks: LiveData<List<TaskData>>
     private val appDb: TaskDataBase
@@ -17,14 +16,23 @@ class TaskViewModel(@NotNull application: Application) : AndroidViewModel(applic
         listTasks = appDb.taskDataDao().getIncompleteTasks()
     }
 
+    /**
+     * Get all tasks that are incomplete.
+     */
     fun getCurrentData(): LiveData<List<TaskData>> {
         return listTasks
     }
 
+    /**
+     * @return task corresponding to given id.
+     */
     fun getTask(taskId: Long) : TaskData {
         return  getAsynTask(appDb).execute(taskId).get()
     }
 
+    /**
+     * Adds task to database.
+     */
     fun addTask(task: TaskData) {
         addAsynTask(appDb).execute(task)
     }
@@ -38,6 +46,7 @@ class TaskViewModel(@NotNull application: Application) : AndroidViewModel(applic
         }
 
     }
+
     class getAsynTask(db: TaskDataBase) : AsyncTask<Long, Void, TaskData>() {
         private var taskDb = db
         override fun doInBackground(vararg p0: Long?): TaskData {

@@ -22,13 +22,16 @@ class EditTaskActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_task)
         mViewModel = ViewModelProviders.of(this).get(TaskViewModel::class.java)
 
+        // Get extras if task to be edited
         val extras = intent.extras
         if (extras != null && extras.containsKey("task_id")) {
             createNew = false
             editId = extras.getLong("task_id")
         }
+
         save.setOnClickListener({ v -> saveButtonClicked()})
 
+        // Try to load task.
         loadTask()
     }
     /*
@@ -91,6 +94,7 @@ class EditTaskActivity : AppCompatActivity() {
         }
         mViewModel!!.addTask(task)
         Toast.makeText(applicationContext, R.string.editTasKActivityTaskSaved, Toast.LENGTH_LONG).show()
+        // Return to list
         finish()
 
     }

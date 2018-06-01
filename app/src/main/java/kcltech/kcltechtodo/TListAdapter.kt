@@ -11,13 +11,14 @@ import kotlinx.android.synthetic.main.task_list_item.view.*
 class TListAdapter(items : ArrayList<TaskData>, listener: OnItemClickListener) : RecyclerView.Adapter<ViewHolder>() {
 
     private var listTasks: List<TaskData> = items
-    private var listenerContact: OnItemClickListener = listener
+    private var listenerTask: OnItemClickListener = listener
 
-    // Gets the number of animals in the list
+    // Gets the number of tasks in the list
     override fun getItemCount(): Int {
         return listTasks.size
     }
 
+    // update the task list.
     fun addTasks(listTasks: List<TaskData>) {
         this.listTasks = listTasks
         notifyDataSetChanged()
@@ -28,20 +29,18 @@ class TListAdapter(items : ArrayList<TaskData>, listener: OnItemClickListener) :
         return ViewHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.task_list_item, parent, false))
     }
 
-    // Binds each animal in the ArrayList to a view
+    // Binds each task in the ArrayList to a view and listener
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         var currentTask: TaskData = listTasks[position]
 
         holder?.title?.text = currentTask.title
         holder?.dueDate?.text = currentTask.dueDate.toString("d MMM YYYY")
-        holder!!.bind(currentTask, listenerContact)
+        holder!!.bind(currentTask, listenerTask)
     }
 
     interface OnItemClickListener {
         fun onItemClick(task: TaskData)
     }
-
-
 }
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
