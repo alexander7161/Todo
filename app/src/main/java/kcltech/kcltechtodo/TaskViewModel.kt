@@ -21,7 +21,6 @@ class TaskViewModel(@NotNull application: Application) : AndroidViewModel(applic
         return listTasks
     }
 
-
     fun getTask(taskId: Long) : TaskData {
         return  appDb.taskDataDao().getTask(taskId)
     }

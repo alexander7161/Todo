@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "kcltech.kcltechtodo"
         minSdkVersion 26
@@ -20,7 +20,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     apply plugin: 'kotlin-kapt'
     implementation "joda-time:joda-time:2.7"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,6 +41,7 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.1.0"
     kapt "android.arch.persistence.room:compiler:1.1.0"
 }
+
 repositories {
     mavenCentral()
 }
