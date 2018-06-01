@@ -1,5 +1,7 @@
 package kcltech.kcltechtodo;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,33 +17,36 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TaskListActivity extends AppCompatActivity
 {
+    private TaskViewModel mViewModel;
     //view components
     private ListView listView;
 
-    //list view state
-    private ArrayList<Task> tasks = new ArrayList<>();
     private TaskListAdapter listAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
+        mViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         setTitle(R.string.taskListActivityTitle);
+
+
 
         //find views
         listView = findViewById(R.id.taskListView);
         //set up adapter
-        listAdapter = new TaskListAdapter(this,tasks);
+        listAdapter = new TaskListAdapter(this,mViewModel.getCurrentData().getValue());
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                taskClicked((Task)listAdapter.getItem(i));
+                taskClicked((TaskData)listAdapter.getItem(i));
             }
         });
 
@@ -81,14 +86,12 @@ public class TaskListActivity extends AppCompatActivity
 
     private void refreshTasks()
     {
-        DbHelper dbHelper = new DbHelper(getApplicationContext());
-        tasks = dbHelper.getIncompleteTasks();
-        listAdapter.setTasks(tasks);
+        listAdapter.setTasks(mViewModel.getCurrentData().getValue());
         listAdapter.notifyDataSetInvalidated();
     }
 
 
-    private void taskClicked(final Task task)
+    private void taskClicked(final TaskData task)
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
@@ -99,7 +102,7 @@ public class TaskListActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         task.setComplete(true);
-                        new DbHelper(getApplicationContext()).saveTask(task);
+                        mViewModel.addTask(task);
                         refreshTasks();
                     }
                 }

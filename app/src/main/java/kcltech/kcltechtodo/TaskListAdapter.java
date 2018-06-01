@@ -8,21 +8,22 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TaskListAdapter extends BaseAdapter
 {
     //Data
     private Activity activity;
-    private ArrayList<Task> tasks = null;
+    private List<TaskData> tasks = null;
 
-    public TaskListAdapter(Activity activity, ArrayList<Task> tasks)
+    public TaskListAdapter(Activity activity, List<TaskData> tasks)
     {
         this.activity = activity;
         this.tasks = tasks;
     }
 
-    public void setTasks(ArrayList<Task> tasks)
+    public void setTasks(List<TaskData> tasks)
     {
         this.tasks = tasks;
     }
@@ -42,7 +43,7 @@ public class TaskListAdapter extends BaseAdapter
 
     @Override
     public long getItemId(int i) {
-        Task t = (Task) getItem(i);
+        TaskData t = (TaskData) getItem(i);
         return t == null ? -1 : t.getId();
     }
 
@@ -56,7 +57,7 @@ public class TaskListAdapter extends BaseAdapter
 
         TextView title = v.findViewById(R.id.title_view);
         TextView dueDate = v.findViewById(R.id.due_date);
-        Task task = (Task) getItem(i);
+        TaskData task = (TaskData) getItem(i);
 
         title.setText(task.getTitle());
         dueDate.setText(task.getDueDate().toString("d MMM YYYY"));

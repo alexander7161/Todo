@@ -1,5 +1,7 @@
 package kcltech.kcltechtodo;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import org.joda.time.DateTime;
 
 public class EditTaskActivity extends AppCompatActivity {
 
+    private TaskViewModel mViewModel;
 
     //View components
     private EditText titleInput;
@@ -37,6 +40,8 @@ public class EditTaskActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_edit_task);
+        mViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+
 
         titleInput = findViewById(R.id.titleInput);
         notesInput = findViewById(R.id.notesInput);
@@ -62,13 +67,12 @@ public class EditTaskActivity extends AppCompatActivity {
     {
         if(!createNew)
         {
-            DbHelper dbHelper = new DbHelper(getApplicationContext());
-            final Task task = dbHelper.getTask(editId);
+            final TaskData task = mViewModel.getTask(editId);
             taskLoaded(task);
         }
     }
 
-    private void taskLoaded(Task t)
+    private void taskLoaded(TaskData t)
     {
         if (t == null)
         {
@@ -117,26 +121,13 @@ public class EditTaskActivity extends AppCompatActivity {
 
         //make a new task object
 
-        final Task task = new Task(title,notes,false,dueDate);
+        final TaskData task = new TaskData(editId,title,notes,false,dueDate);
 
-        //set id
 
-        if(createNew)
-        {
-            task.setId(System.currentTimeMillis());
-        }else
-        {
-            task.setId(editId);
-        }
-
-        //Save it in the DB
-
-        DbHelper dbHelper = new DbHelper(getApplicationContext());
-        dbHelper.saveTask(task);
+        mViewModel.addTask(task);
         Toast.makeText(getApplicationContext(), R.string.editTasKActivityTaskSaved,Toast.LENGTH_LONG).show();
 
     }
-
 
 
 }
